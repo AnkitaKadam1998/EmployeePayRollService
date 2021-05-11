@@ -17,28 +17,22 @@ public class EmployeePayrollService {
 	{
 		List<EmployeePayrollData> datas = new ArrayList<EmployeePayrollData>();
 		EmployeePayrollService service = new EmployeePayrollService(datas);
-		service.readData(new Scanner(System.in));
-		service.writeData();
-	}
-	public void writeData()
-	{
-		System.out.println("\nWrinting Employee payroll  : \n"+datas);
-	}
-	
-	private void readData(Scanner scanner)
-	{
-		System.out.println("Enter id");
-		int id = scanner.nextInt();
+		FileOptUtils utils = new FileOptUtils();
 		
-		System.out.println("Enter name");
-		String name = scanner.next();
-		
-		System.out.println("Enter salary");
-		double salary = scanner.nextDouble();
-		this.datas.add(new EmployeePayrollData(id,salary,name));
+		utils.isFileExits("Data");
+		utils.createFolder("Data");
+		utils.createFile("Data/data1.txt");
+		utils.writeFile("Data/data1.txt");
+		utils.readFile("Data/data1.txt");
+		utils.listOfFilesandFolder("Data");
+		utils.deleteFloder("Data/data1.txt");
+		utils.deleteFloder("Data");
 		
 	}
 }
+	
+			
+	
 
 class EmployeePayrollData
 {
