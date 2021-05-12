@@ -1,1 +1,0 @@
-EmployeePayrollData [id=10, salary=20000.0, name=ankita]
