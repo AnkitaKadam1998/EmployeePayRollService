@@ -1,42 +1,107 @@
-import java.io.File;
-import java.io.FileWriter;
+package com.day27;
+
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-public class EmployeeStore {
+public class EmployeePayrollService {
+
+	public enum IOService {
+		  CONSOLE_ID, FILE_ID;		
+	        }
 	
-	public static void main(String args[]) throws IOException
-	{
-		Employee E1= new Employee (10,20000,"Manish");
-		Employee E2= new Employee (12,25000,"raj");
-		Employee E3= new Employee (13,22000,"shubham");
+	private List<EmployeePayrollData> data;
+	
+	public EmployeePayrollService() {}
+
+	public EmployeePayrollService(List<EmployeePayrollData> data) {
+		this.data = data;
+	}
+
+	public static void main(String[] args) throws Exception  {
 		
+		List<EmployeePayrollData> data = new ArrayList<EmployeePayrollData>();
+		EmployeePayrollService service=new EmployeePayrollService(data);		
 		
-		Employee[] employee = new Employee[3];
-		employee[0]=E1;
-		employee[1]=E2;
-		employee[2]=E3;
+		service.readData(new Scanner(System.in));
+		service.writeData(IOService.FILE_ID);
 		
+	}
+	
+	private void writeData(IOService service) throws IOException {
 		
-		for (int i=0;i<employee.length;i++)
-		{
-			String outputText=employee[i].getId() + "|" + employee[i].getName() + "|" + employee[i].getSalary();
-			saveTofile("employeeList.txt",outputText, true);
+		if(service.equals(IOService.FILE_ID)) {
+			writeDatainfile();
 		}
+		else if(service.equals(IOService.CONSOLE_ID)) {
+			System.out.println("\nData Written:"+data);
+		}	
+	}
+	
+	private void writeDatainfile() throws IOException {
 		
+		StringBuffer buffer = new StringBuffer();
+		data.forEach(emp -> {	
+		String empData=emp.toString().concat("\n");
+		buffer.append(empData);
+		});
 		
+		Files.write(Paths.get("C:\\Users\\Ankita\\eclipse-workspace\\Day-27\\employee.txt"), buffer.toString().getBytes());
+			
+	}
+	
+	private void readData(Scanner scanner) {
+		System.out.println("Enter ID: ");
+		int id = scanner.nextInt();
+		
+		System.out.println("Enter name: ");
+		String name = scanner.next();
+		
+		System.out.println("Enter salary: ");
+		double sal = scanner.nextDouble();
+		
+		data.add(new EmployeePayrollData(id, name, sal));
 		
 	}
 
-	private static void saveTofile(String fileName,String text, boolean append)throws IOException
-	{
-		File file1= new File(fileName);
-		FileWriter fw = new FileWriter(file1,append);
-		PrintWriter pw = new PrintWriter(fw);
-		
-		pw.println(text);
-		pw.close();
-		
-	}
+}
 
+class EmployeePayrollData{
+	private int id;
+	private double salary;
+	private String name;
+	
+	
+	public EmployeePayrollData() {
+	}
+	public EmployeePayrollData(int id, String name, double salary) {
+		this.id = id;
+		this.salary = salary;
+		this.name = name;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public double getSalary() {
+		return salary;
+	}
+	public void setSalary(double salary) {
+		this.salary = salary;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	@Override
+	public String toString() {
+		return "EmployeePayrollData [id=" + id + ", salary=" + salary + ", name=" + name + "]";
+	}
 }
